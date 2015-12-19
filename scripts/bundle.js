@@ -12700,7 +12700,7 @@ $(document).ready(function () {
 		$todoItems.append(newList.$el);
 	});
 
-	// ToDo.fetch();
+	ToDo.fetch();
 });
 
 },{"./collections/ToDoCollection":4,"./models/ToDoModel":6,"./views/ToDoView":7,"backbone/node_modules/underscore":2,"jquery":3}],6:[function(require,module,exports){

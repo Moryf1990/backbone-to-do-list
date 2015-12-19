@@ -27,5 +27,5 @@ $(document).ready(function() {
 		$todoItems.append(newList.$el);
 	});
 
-	// ToDo.fetch();
+	ToDo.fetch();
 });
