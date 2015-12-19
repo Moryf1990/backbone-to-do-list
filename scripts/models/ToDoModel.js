@@ -5,4 +5,5 @@ module.exports = Backbone.Model.extend({
 		incomplete: true
 	},
 	urlRoot:'http://tiyfe.herokuapp.com/collections/morrisftodolist'
-})
+
+});

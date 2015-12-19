@@ -12672,66 +12672,38 @@ module.exports = Backbone.Collection.extend({
 
 },{"../models/ToDoModel":6,"backbone":1}],5:[function(require,module,exports){
 'use strict';
-var $todoItemArray = [];
 var $ = require('jquery');
-var To_Do_Collection = require('./collections/ToDoCollections');
+var ToDoCollection = require('./collections/ToDoCollection');
 var ToDoModel = require('./models/ToDoModel');
+var ToDoView = require('./views/ToDoView');
 var _ = require('backbone/node_modules/underscore');
+
 $(document).ready(function () {
-	var $top = $('#top');
 	var $todoForm = $('#todo-form');
 	var $todoList = $('#todo-list');
 	var $todoItems = $('#todo-Items');
-	var $toAdd = $('#add');
 
-	var toDoItems = new To_Do_Collection();
+	var ToDo = new ToDoCollection();
 
-	function whenButtonIsClicked(e) {
+	$todoForm.on('submit', function (e) {
 		e.preventDefault();
+		console.log($todoList.val());
+		ToDo.add({
+			listItem: $todoList.val()
+		});
+		$todoList.val('');
+	});
 
-		if ($todoList.val()) {
-			$todoItemArray.push($todoList.val());
-			$todoItems.val('');
-			this.render();
-		} else {
-			console.log('No Input');
-		}
-	}
+	ToDo.on('add', function (newListItem) {
+		newListItem.save();
+		var newList = new ToDoView({ model: newListItem });
+		$todoItems.append(newList.$el);
+	});
 
-	$toAdd.on('click', whenButtonIsClicked);
+	// ToDo.fetch();
 });
-// var $=require('jquery');
 
-// $(document).ready(function() {
-
-// var $top=$('#top');
-// var $todoForm=$('#todo-form');
-// var $todoList=$('#todo-list');
-// var $todoItems=$('#todo-Items');
-// var $toAdd=$('#add');
-
-// 	function render(){
-
-// 	}
-
-// 	function whenButtonIsClicked(e) {
-// 		e.preventDefault();
-
-// 		if ($todoList.val()) {
-// 			$todoItemArray.push($todoList.val());
-// 			$todoItems.val('');
-// 			this.render();		
-// 		}
-// 		else {
-// 			console.log('No Input');
-// 		}
-// 	}
-
-// $toAdd.on('click', whenButtonIsClicked)
-
-// });
-
-},{"./collections/ToDoCollections":4,"./models/ToDoModel":6,"backbone/node_modules/underscore":2,"jquery":3}],6:[function(require,module,exports){
+},{"./collections/ToDoCollection":4,"./models/ToDoModel":6,"./views/ToDoView":7,"backbone/node_modules/underscore":2,"jquery":3}],6:[function(require,module,exports){
 'use strict';
 
 var Backbone = require('backbone');
@@ -12741,9 +12713,56 @@ module.exports = Backbone.Model.extend({
 		incomplete: true
 	},
 	urlRoot: 'http://tiyfe.herokuapp.com/collections/morrisftodolist'
+
 });
 
-},{"backbone":1}]},{},[5])
+},{"backbone":1}],7:[function(require,module,exports){
+'use strict';
+
+var Backbone = require('backbone');
+var _ = require('backbone/node_modules/underscore');
+var $ = require('jquery');
+
+module.exports = Backbone.View.extend({
+	tagName: 'section',
+	initialize: function initialize() {
+		_.bindAll(this, 'render',
+		// 'onChange',
+		'toggleCompletion', 'remove');
+
+		this.model.on('change', this.render);
+		this.$el.on('click', this.onChange);
+		this.render();
+	},
+
+	render: function render() {
+		var newItem = _.template($('#todo-items').html());
+		this.$el.html(newItem(this.model.toJSON()));
+		if (!this.model.get('incomplete')) {
+			this.$el.css('text-decoration', 'line-through');
+		} else {
+			this.$el.css('text-decoration', 'none');
+		}
+		this.$el.find('button').on('click', this.remove);
+	},
+
+	// onChange: function() {
+	// 	var newListItem = this.model.get('listItem');
+	// 	this.$el.set({incomplete: false});
+	// },
+
+	toggleCompletion: function toggleCompletion() {
+		this.model.set({
+			incomplete: !this.model.get('incomplete')
+		});
+	},
+
+	remove: function remove() {
+		this.$el.remove();
+	}
+});
+
+},{"backbone":1,"backbone/node_modules/underscore":2,"jquery":3}]},{},[5])
 
 
 //# sourceMappingURL=bundle.js.map
