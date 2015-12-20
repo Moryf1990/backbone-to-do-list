@@ -8,7 +8,6 @@ module.exports = Backbone.View.extend({
 		_.bindAll (
 			this,
 			'render',
-			// 'onChange',
 			'toggleCompletion',
 			'remove'
 		);
@@ -28,11 +27,6 @@ module.exports = Backbone.View.extend({
 		}
 		this.$el.find('button').on('click', this.remove);
 	},
-
-	// onChange: function() {
-	// 	var newListItem = this.model.get('listItem');
-	// 	this.$el.set({incomplete: false});
-	// },
 
 	toggleCompletion: function() {
     	this.model.set({
