@@ -12700,7 +12700,7 @@ $(document).ready(function () {
 		$todoItems.append(newList.$el);
 	});
 
-	ToDo.fetch();
+	ToDo.get();
 });
 
 },{"./collections/ToDoCollection":4,"./models/ToDoModel":6,"./views/ToDoView":7,"backbone/node_modules/underscore":2,"jquery":3}],6:[function(require,module,exports){
@@ -12726,9 +12726,7 @@ var $ = require('jquery');
 module.exports = Backbone.View.extend({
 	tagName: 'section',
 	initialize: function initialize() {
-		_.bindAll(this, 'render',
-		// 'onChange',
-		'toggleCompletion', 'remove');
+		_.bindAll(this, 'render', 'toggleCompletion', 'remove');
 
 		this.model.on('change', this.render);
 		this.$el.on('click', this.onChange);
@@ -12745,11 +12743,6 @@ module.exports = Backbone.View.extend({
 		}
 		this.$el.find('button').on('click', this.remove);
 	},
-
-	// onChange: function() {
-	// 	var newListItem = this.model.get('listItem');
-	// 	this.$el.set({incomplete: false});
-	// },
 
 	toggleCompletion: function toggleCompletion() {
 		this.model.set({
